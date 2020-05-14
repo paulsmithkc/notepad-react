@@ -35,9 +35,6 @@ class App extends React.Component {
     return (
       <React.Fragment>
         <div className="d-flex flex-wrap align-items-center">
-          <h1 className="flex-grow-1 m-3">
-            <i className="fa-fw fas fa-clipboard"></i> Notepad w/ MongoDB &amp; React
-          </h1>
           <div>
             <button
               type="button"
