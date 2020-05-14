@@ -20,6 +20,7 @@ app.get('/', (request, response) => {
   response.sendFile(path.join(__dirname, 'public/index.html'));
 });
 app.use('/api/note', require('./api/note'));
+app.use('/dist', express.static('dist'));
 app.use(express.static('public'));
 app.use((request, response) => {
   response.status(404).type('text/plain').send('Page Not Found');
