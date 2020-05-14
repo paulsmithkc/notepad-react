@@ -83,10 +83,52 @@ class App extends React.Component {
     ) : (
       <div className="row">
         {map(this.state.notes, (note) => (
-          <NoteCard key={note._id} id={note._id} title={note.title} body={note.body} />
+          <ErrorBoundary key={note._id}>
+            {note.isEdit ? (
+              <NoteForm
+                id={note._id}
+                title={note.title}
+                body={note.body}
+                onCancel={(id) => this.endEdit(id)}
+              />
+            ) : (
+              <NoteCard
+                id={note._id}
+                title={note.title}
+                body={note.body}
+                onEdit={(id) => this.beginEdit(id)}
+              />
+            )}
+          </ErrorBoundary>
         ))}
       </div>
     );
+  }
+  /**
+   * Start editing a note.
+   * @param {string} id the id of the note
+   */
+  beginEdit(id) {
+    const notes = map(this.state.notes, (note) => {
+      if (note._id == id) {
+        note.isEdit = true;
+      }
+      return note;
+    });
+    this.setState({ notes: notes });
+  }
+  /**
+   * Stop editing a note.
+   * @param {string} id the id of the note
+   */
+  endEdit(id) {
+    const notes = map(this.state.notes, (note) => {
+      if (note._id == id) {
+        note.isEdit = false;
+      }
+      return note;
+    });
+    this.setState({ notes: notes });
   }
   /**
    * Get all of the notes from the database and display them.

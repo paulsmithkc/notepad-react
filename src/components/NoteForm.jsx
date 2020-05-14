@@ -36,14 +36,18 @@ const NoteForm = (props) => (
             type="text"
             id="Note-title"
             name="title"
-            value={props.title || ''}
+            defaultValue={props.title || ''}
           />
         </div>
         <div className="form-group">
           <label htmlFor="Note-body">Body</label>
-          <textarea className="form-control" rows="7" id="Note-body" name="body">
-            {props.body || ''}
-          </textarea>
+          <textarea
+            className="form-control"
+            rows="7"
+            id="Note-body"
+            name="body"
+            defaultValue={props.body || ''}
+          />
         </div>
         <output>{props.error ? <h4 className="text-danger">{props.error}</h4> : null}</output>
       </div>
