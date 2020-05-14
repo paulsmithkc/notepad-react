@@ -1,5 +1,7 @@
 import React from 'react';
 import ErrorBoundary from './ErrorBoundary';
+import NoteCard from './NoteCard';
+import NoteForm from './NoteForm';
 import isEmpty from 'lodash/isEmpty';
 import map from 'lodash/map';
 
@@ -19,7 +21,7 @@ class App extends React.Component {
    * Called after the component is mounted.
    */
   componentDidMount() {
-    this.getAllNotesFromAPI();
+    this.getAllNotes();
   }
   /**
    * Render this component
@@ -35,22 +37,18 @@ class App extends React.Component {
           <div>
             <button
               type="button"
-              className="Note-refresh-btn btn btn-outline-primary mx-1"
+              className="btn btn-outline-primary mx-1"
               title="Refresh"
-              onClick={() => this.getAllNotesFromAPI()}
+              onClick={() => this.getAllNotes()}
             >
               <i className="fa-fw fas fa-sync-alt"></i> Refresh
             </button>
-            <button
-              type="button"
-              className="Note-add-btn btn btn-outline-primary mx-1"
-              title="Add Note"
-            >
+            <button type="button" className="btn btn-outline-primary mx-1" title="Add Note">
               <i className="fa-fw fas fa-plus-circle"></i> Add Note
             </button>
             <button
               type="button"
-              className="Note-delete-all-btn btn btn-outline-primary mx-1"
+              className="btn btn-outline-primary mx-1"
               title="Delete All Notes"
               onClick={() => this.deleteAllNotes()}
             >
@@ -59,7 +57,7 @@ class App extends React.Component {
           </div>
         </div>
         <hr></hr>
-        <div id="Note-container">
+        <div>
           <ErrorBoundary>{this.renderError()}</ErrorBoundary>
           <ErrorBoundary>{this.renderNotes()}</ErrorBoundary>
         </div>
@@ -71,7 +69,7 @@ class App extends React.Component {
    * @return {React.Component}
    */
   renderError() {
-    return this.state.error ? <h4 className="text-error">{this.state.error.message}</h4> : null;
+    return this.state.error ? <h4 className="text-danger">{this.state.error}</h4> : null;
   }
   /**
    * Render the all notes.
@@ -83,11 +81,9 @@ class App extends React.Component {
     ) : isEmpty(this.state.notes) ? (
       <h4>No notes found</h4>
     ) : (
-      <div>
+      <div className="row">
         {map(this.state.notes, (note) => (
-          <div key={note._id} className="card">
-            {note.title}
-          </div>
+          <NoteCard key={note._id} id={note._id} title={note.title} body={note.body} />
         ))}
       </div>
     );
@@ -95,20 +91,31 @@ class App extends React.Component {
   /**
    * Get all of the notes from the database and display them.
    */
-  getAllNotesFromAPI() {
+  getAllNotes() {
     this.setState({ notes: null, error: null });
     fetch('/api/note')
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Failed to get notes: ${response.status} ${response.statusText}`);
+        } else {
+          return response.json();
+        }
+      })
       .then((data) => this.setState({ notes: data, error: null }))
-      .catch((err) => this.setState({ notes: [], error: err }));
+      .catch((err) => this.setState({ notes: [], error: err.message }));
   }
   /**
    * Delete all notes from the database.
    */
   deleteAllNotes() {
     fetch('/api/note/all', { method: 'DELETE' })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Failed to delete all notes: ${response.status} ${response.statusText}`);
+        }
+      })
       .then(() => this.setState({ notes: [], error: null }))
-      .catch((err) => this.setState({ notes: [], error: err }));
+      .catch((err) => this.setState({ error: err.message }));
   }
 }
 
