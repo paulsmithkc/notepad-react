@@ -179,6 +179,7 @@ class App extends React.Component {
       }
       return note;
     });
+    notes = filter(notes, (x) => !x.isNew || x.isEdit);
     this.setState({ notes: notes });
   }
   /**
