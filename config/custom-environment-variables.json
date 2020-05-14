@@ -4,6 +4,10 @@
     "hostname": "HOSTNAME",
     "port": "PORT"
   },
+  "devserver": {
+    "hostname": "HOSTNAME_DEVSERVER",
+    "port": "PORT_DEVSERVER"
+  },
   "db": {
     "name": "DB_NAME",
     "uri": "DB_URI"
