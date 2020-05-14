@@ -7,6 +7,7 @@ import filter from 'lodash/filter';
 import map from 'lodash/map';
 import find from 'lodash/find';
 import assign from 'lodash/assign';
+import concat from 'lodash/concat';
 
 /**
  * Root component for the react application.
@@ -98,9 +99,9 @@ class App extends React.Component {
                 title={note.newTitle}
                 body={note.newBody}
                 error={note.error}
-                onTitleChange={(id, title) => this.updateNote({ _id: id, newTitle: title })}
-                onBodyChange={(id, body) => this.updateNote({ _id: id, newBody: body })}
-                onCancel={(id) => this.updateNote({ _id: id, isEdit: false, error: null })}
+                onTitleChange={(id, title) => this.updateNote(id, { newTitle: title })}
+                onBodyChange={(id, body) => this.updateNote(id, { newBody: body })}
+                onCancel={(id) => this.updateNote(id, { isEdit: false, error: null })}
                 onSave={(id) => this.saveNote(id)}
               />
             ) : (
@@ -110,13 +111,7 @@ class App extends React.Component {
                 body={note.body}
                 error={note.error}
                 onEdit={(id, title, body) =>
-                  this.updateNote({
-                    _id: id,
-                    isEdit: true,
-                    newTitle: title,
-                    newBody: body,
-                    error: null,
-                  })
+                  this.updateNote(id, { isEdit: true, newTitle: title, newBody: body, error: null })
                 }
                 onDelete={(id) => this.deleteNote(id)}
               />
@@ -170,15 +165,16 @@ class App extends React.Component {
         const notes = filter(this.state.notes, (note) => note._id != id);
         this.setState({ notes: notes });
       })
-      .catch((err) => this.updateNote({ _id: id, error: err.message }));
+      .catch((err) => this.updateNote(id, { error: err.message }));
   }
   /**
    * Update the properties a single note.
+   * @param {string} id the id of the note
    * @param {object} values the new property values
    */
-  updateNote(values) {
-    const notes = map(this.state.notes, (note) => {
-      if (note._id == values._id) {
+  updateNote(id, values) {
+    let notes = map(this.state.notes, (note) => {
+      if (note._id == id) {
         note = assign(note, values);
       }
       return note;
@@ -197,11 +193,17 @@ class App extends React.Component {
         title: note.newTitle,
         body: note.newBody,
       };
-      const request = fetch('/api/note/' + id, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestData),
-      });
+      const request = note.isNew
+        ? fetch('/api/note/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(requestData),
+        })
+        : fetch('/api/note/' + id, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(requestData),
+        });
       request
         .then((response) => {
           if (!response.ok) {
@@ -211,15 +213,33 @@ class App extends React.Component {
           }
         })
         .then((data) =>
-          this.updateNote({
-            _id: id,
-            isEdit: false,
+          this.updateNote(id, {
+            _id: data._id,
             title: data.title,
             body: data.body,
+            isNew: false,
+            isEdit: false,
             error: null,
           })
         )
-        .catch((err) => this.updateNote({ _id: id, error: err.message }));
+        .catch((err) => this.updateNote(id, { error: err.message }));
+    }
+  }
+  /**
+   * Adds a new note editor.
+   */
+  addNote() {
+    if (find(this.state.notes, (x) => x.isNew) == null) {
+      const newNote = {
+        _id: null,
+        isNew: true,
+        isEdit: true,
+        newTitle: '',
+        newBody: '',
+        error: null,
+      };
+      const notes = concat([newNote], this.state.notes);
+      this.setState({ notes: notes });
     }
   }
 }
