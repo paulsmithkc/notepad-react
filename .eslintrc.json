@@ -5,6 +5,7 @@
         "node": true
     },
     "extends": [
+        "plugin:react/recommended",
         "google"
     ],
     "globals": {
@@ -12,9 +13,15 @@
         "SharedArrayBuffer": "readonly"
     },
     "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
         "ecmaVersion": 11,
         "sourceType": "module"
     },
+    "plugins": [
+        "react"
+    ],
     "rules": {
         "linebreak-style": [ "warn", "windows" ],
         "spaced-comment": [ "warn", "always" ],
