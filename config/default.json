@@ -1,0 +1,11 @@
+{
+  "debug": "app:*",
+  "http": {
+    "hostname": "localhost",
+    "port": 3000
+  },
+  "db": {
+    "name": "notepad",
+    "uri": "mongodb://localhost"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "name": "@ranken/notepad_mongodb",
+  "version": "1.0.0",
+  "description": "Notepad example project w/ MongoDB",
+  "main": "index.js",
+  "scripts": {
+    "start": "node -r dotenv/config index.js",
+    "nodemon": "nodemon -r dotenv/config index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paulsmithkc/base-node-curriculum.git"
+  },
+  "author": "Paul Smith",
+  "license": "MIT",
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "engines": {
+    "node": "12.16.3"
+  },
+  "env": {
+    "DEBUG": {
+      "description": "Which debug channels should be monitored?",
+      "value": "app:*"
+    }
+  },
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "config": "^3.3.1",
+    "debug": "^4.1.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^3.22.0",
+    "joi-objectid": "^3.0.1",
+    "mongodb": "^3.5.7"
+  },
+  "devDependencies": {
+    "eslint": "^7.0.0",
+    "eslint-config-google": "^0.14.0"
+  }
+}

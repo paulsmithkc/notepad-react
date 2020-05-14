@@ -1,0 +1,11 @@
+{
+  "debug": "DEBUG",
+  "http": {
+    "hostname": "HOSTNAME",
+    "port": "PORT"
+  },
+  "db": {
+    "name": "DB_NAME",
+    "uri": "DB_URI"
+  }
+}

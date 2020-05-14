@@ -1,0 +1,32 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true
+    },
+    "extends": [
+        "google"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "ecmaVersion": 11,
+        "sourceType": "module"
+    },
+    "rules": {
+        "linebreak-style": [ "warn", "windows" ],
+        "spaced-comment": [ "warn", "always" ],
+        "object-curly-spacing": [ "warn", "always" ],
+        "quotes": [ "warn", "single", { "allowTemplateLiterals": true } ],
+        "operator-linebreak": [ "warn", "before" ],
+        "max-len": [ "warn", { "code": 120, "tabWidth": 2 }],
+        "indent": ["warn", 2 ],
+        "require-jsdoc": "warn",
+        "no-unused-vars": "warn",
+        "no-trailing-spaces": "warn",
+        "new-cap": "off",
+        "comma-dangle": "off"
+    }
+}
