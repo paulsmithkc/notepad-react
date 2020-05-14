@@ -41,6 +41,6 @@ app.use(require('./middleware/error'));
 // bind the server to an http port
 const hostname = config.get('http.hostname');
 const port = config.get('http.port');
-app.listen(port, hostname, () => {
+app.listen(port, () => {
   debug(`Server running at http://${hostname}:${port}/`);
 });
