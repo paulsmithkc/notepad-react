@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import App from './components/App';
 
 ReactDOM.render(
-  // <React.Suspense fallback={<div>Loading application...</div>}>
-  //   Hello World!
-  // </React.Suspense>,
-  <h1>Hello World!</h1>,
+  <App />,
   document.getElementById('root')
 );

@@ -20,6 +20,10 @@ module.exports = (env) => {
       port: devPort,
       publicPath: `http://${devHostname}:${devPort}/dist/`,
     },
+    resolve: {
+      modules: ['node_modules', path.resolve(__dirname, 'src/')],
+      extensions: ['.js', '.jsx', '.json', '.css'],
+    },
     module: {
       rules: [
         {
