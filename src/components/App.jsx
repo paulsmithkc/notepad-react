@@ -1,13 +1,16 @@
 import React from 'react';
 import ErrorBoundary from './ErrorBoundary';
-import NoteCard from './NoteCard';
-import NoteForm from './NoteForm';
 import isEmpty from 'lodash/isEmpty';
 import filter from 'lodash/filter';
 import map from 'lodash/map';
 import find from 'lodash/find';
 import assign from 'lodash/assign';
 import concat from 'lodash/concat';
+
+import NoteCard from './NoteCard';
+import NoteForm from './NoteForm';
+// const NoteCard = React.lazy(() => import('./NoteCard'));
+// const NoteForm = React.lazy(() => import('./NoteForm'));
 
 /**
  * Root component for the react application.
@@ -65,7 +68,11 @@ class App extends React.Component {
         <hr></hr>
         <div>
           <ErrorBoundary>{this.renderError()}</ErrorBoundary>
-          <ErrorBoundary>{this.renderNotes()}</ErrorBoundary>
+          <ErrorBoundary>
+            <React.Suspense fallback={<h4 className="text-muted">Loading notes, please wait...</h4>}>
+              {this.renderNotes()}
+            </React.Suspense>
+          </ErrorBoundary>
         </div>
       </React.Fragment>
     );
@@ -83,7 +90,7 @@ class App extends React.Component {
    */
   renderNotes() {
     return this.state.notes == null ? (
-      <h4>Loading notes, please wait...</h4>
+      <h4 className="text-muted">Loading notes, please wait...</h4>
     ) : isEmpty(this.state.notes) ? (
       <h4>No notes found</h4>
     ) : (
