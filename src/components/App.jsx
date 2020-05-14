@@ -7,10 +7,10 @@ import find from 'lodash/find';
 import assign from 'lodash/assign';
 import concat from 'lodash/concat';
 
-import NoteCard from './NoteCard';
-import NoteForm from './NoteForm';
-// const NoteCard = React.lazy(() => import('./NoteCard'));
-// const NoteForm = React.lazy(() => import('./NoteForm'));
+import NoteViewer from './NoteViewer';
+import NoteEditor from './NoteEditor';
+// const NoteViewer = React.lazy(() => import('./NoteViewer'));
+// const NoteEditor = React.lazy(() => import('./NoteEditor'));
 
 /**
  * Root component for the react application.
@@ -98,7 +98,7 @@ class App extends React.Component {
         {map(this.state.notes, (note) => (
           <ErrorBoundary key={note._id}>
             {note.isEdit ? (
-              <NoteForm
+              <NoteEditor
                 id={note._id}
                 title={note.newTitle}
                 body={note.newBody}
@@ -109,7 +109,7 @@ class App extends React.Component {
                 onSave={(id) => this.saveNote(id)}
               />
             ) : (
-              <NoteCard
+              <NoteViewer
                 id={note._id}
                 title={note.title}
                 body={note.body}

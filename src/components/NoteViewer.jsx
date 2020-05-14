@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const NoteCard = (props) => (
+const NoteViewer = (props) => (
   <div className="col-sm-6 col-md-4" data-id={props.id}>
     <div className="card mb-3">
       <div className="card-header d-flex flex-wrap align-items-center">
@@ -35,7 +35,7 @@ const NoteCard = (props) => (
   </div>
 );
 
-NoteCard.propTypes = {
+NoteViewer.propTypes = {
   id: PropTypes.string,
   title: PropTypes.string,
   body: PropTypes.string,
@@ -44,4 +44,4 @@ NoteCard.propTypes = {
   error: PropTypes.string,
 };
 
-export default NoteCard;
+export default NoteViewer;

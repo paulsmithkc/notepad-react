@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const NoteForm = (props) => (
+const NoteEditor = (props) => (
   <div className="col-sm-6 col-md-4" data-id={props.id}>
     <div className="card mb-3">
       <div className="card-header d-flex flex-wrap align-items-center">
@@ -57,7 +57,7 @@ const NoteForm = (props) => (
   </div>
 );
 
-NoteForm.propTypes = {
+NoteEditor.propTypes = {
   id: PropTypes.string,
   title: PropTypes.string,
   body: PropTypes.string,
@@ -68,4 +68,4 @@ NoteForm.propTypes = {
   error: PropTypes.string,
 };
 
-export default NoteForm;
+export default NoteEditor;
