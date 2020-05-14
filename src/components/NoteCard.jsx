@@ -11,7 +11,7 @@ const NoteCard = (props) => (
             type="button"
             className="btn btn-outline-primary m-1 px-2 py-1"
             title="Edit Note"
-            onClick={() => props.onEdit(props.id)}
+            onClick={() => props.onEdit(props.id, props.title, props.body)}
           >
             <i className="fa-fw fas fa-pen"></i>
             <span className="sr-only">Edit Note</span>

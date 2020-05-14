@@ -4,6 +4,8 @@ import NoteCard from './NoteCard';
 import NoteForm from './NoteForm';
 import isEmpty from 'lodash/isEmpty';
 import map from 'lodash/map';
+import find from 'lodash/find';
+import assign from 'lodash/assign';
 
 /**
  * Root component for the react application.
@@ -32,25 +34,30 @@ class App extends React.Component {
       <React.Fragment>
         <div className="d-flex flex-wrap align-items-center">
           <h1 className="flex-grow-1 m-3">
-            <i className="fa-fw fas fa-clipboard"></i> Notepad w/ MongoDB & React
+            <i className="fa-fw fas fa-clipboard"></i> Notepad w/ MongoDB &amp; React
           </h1>
           <div>
             <button
               type="button"
               className="btn btn-outline-primary mx-1"
               title="Refresh"
-              onClick={() => this.getAllNotes()}
+              onClick={(e) => this.getAllNotes()}
             >
               <i className="fa-fw fas fa-sync-alt"></i> Refresh
             </button>
-            <button type="button" className="btn btn-outline-primary mx-1" title="Add Note">
+            <button
+              type="button"
+              className="btn btn-outline-primary mx-1"
+              title="Add Note"
+              onClick={(e) => this.addNote()}
+            >
               <i className="fa-fw fas fa-plus-circle"></i> Add Note
             </button>
             <button
               type="button"
               className="btn btn-outline-primary mx-1"
               title="Delete All Notes"
-              onClick={() => this.deleteAllNotes()}
+              onClick={(e) => this.deleteAllNotes()}
             >
               <i className="fa-fw fas fa-trash"></i> Delete All Notes
             </button>
@@ -87,48 +94,34 @@ class App extends React.Component {
             {note.isEdit ? (
               <NoteForm
                 id={note._id}
-                title={note.title}
-                body={note.body}
-                onCancel={(id) => this.endEdit(id)}
+                title={note.newTitle}
+                body={note.newBody}
+                error={note.error}
+                onTitleChange={(id, title) => this.updateNote({ _id: id, newTitle: title })}
+                onBodyChange={(id, body) => this.updateNote({ _id: id, newBody: body })}
+                onSave={(id) => this.saveNote(id)}
+                onCancel={(id) => this.updateNote({ _id: id, isEdit: false })}
               />
             ) : (
               <NoteCard
                 id={note._id}
                 title={note.title}
                 body={note.body}
-                onEdit={(id) => this.beginEdit(id)}
+                onEdit={(id, title, body) =>
+                  this.updateNote({
+                    _id: id,
+                    isEdit: true,
+                    newTitle: title,
+                    newBody: body,
+                    error: null,
+                  })
+                }
               />
             )}
           </ErrorBoundary>
         ))}
       </div>
     );
-  }
-  /**
-   * Start editing a note.
-   * @param {string} id the id of the note
-   */
-  beginEdit(id) {
-    const notes = map(this.state.notes, (note) => {
-      if (note._id == id) {
-        note.isEdit = true;
-      }
-      return note;
-    });
-    this.setState({ notes: notes });
-  }
-  /**
-   * Stop editing a note.
-   * @param {string} id the id of the note
-   */
-  endEdit(id) {
-    const notes = map(this.state.notes, (note) => {
-      if (note._id == id) {
-        note.isEdit = false;
-      }
-      return note;
-    });
-    this.setState({ notes: notes });
   }
   /**
    * Get all of the notes from the database and display them.
@@ -158,6 +151,56 @@ class App extends React.Component {
       })
       .then(() => this.setState({ notes: [], error: null }))
       .catch((err) => this.setState({ error: err.message }));
+  }
+  /**
+   * Update the properties a single note.
+   * @param {object} values the new property values
+   */
+  updateNote(values) {
+    const notes = map(this.state.notes, (note) => {
+      if (note._id == values._id) {
+        note = assign(note, values);
+      }
+      return note;
+    });
+    this.setState({ notes: notes });
+  }
+  /**
+   *
+   * @param {string} id the id of the note
+   */
+  saveNote(id) {
+    const note = find(this.state.notes, (x) => x._id == id);
+    if (note) {
+      const requestData = {
+        _id: id,
+        title: note.newTitle,
+        body: note.newBody,
+      };
+      const request = fetch('/api/note/' + id, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestData),
+      });
+      request
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Failed to save note: ${response.status} ${response.statusText}`);
+          } else {
+            return response.json();
+          }
+        })
+        .then((data) =>
+          this.updateNote({
+            _id: id,
+            isEdit: false,
+            title: data.title,
+            body: data.body,
+            error: null,
+          })
+        )
+        .catch((err) => this.updateNote({ _id: id, error: err.message }));
+    }
   }
 }
 

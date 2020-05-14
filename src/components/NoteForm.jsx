@@ -11,7 +11,7 @@ const NoteForm = (props) => (
             type="submit"
             className="btn btn-outline-primary m-1 px-2 py-1"
             title="Save"
-            onClick={() => props.onSave(props.id)}
+            onClick={(e) => props.onSave(props.id)}
           >
             <i className="fa-fw fas fa-save"></i>
             <span className="sr-only">Save</span>
@@ -20,7 +20,7 @@ const NoteForm = (props) => (
             type="button"
             className="btn btn-outline-primary m-1 px-2 py-1"
             title="Cancel"
-            onClick={() => props.onCancel(props.id)}
+            onClick={(e) => props.onCancel(props.id)}
           >
             <i className="fa-fw fas fa-ban"></i>
             <span className="sr-only">Cancel</span>
@@ -36,7 +36,8 @@ const NoteForm = (props) => (
             type="text"
             id="Note-title"
             name="title"
-            defaultValue={props.title || ''}
+            value={props.title}
+            onChange={(e) => props.onTitleChange(props.id, e.target.value)}
           />
         </div>
         <div className="form-group">
@@ -46,7 +47,8 @@ const NoteForm = (props) => (
             rows="7"
             id="Note-body"
             name="body"
-            defaultValue={props.body || ''}
+            value={props.body}
+            onChange={(e) => props.onBodyChange(props.id, e.target.value)}
           />
         </div>
         <output>{props.error ? <h4 className="text-danger">{props.error}</h4> : null}</output>
@@ -59,6 +61,8 @@ NoteForm.propTypes = {
   id: PropTypes.string,
   title: PropTypes.string,
   body: PropTypes.string,
+  onTitleChange: PropTypes.func,
+  onBodyChange: PropTypes.func,
   onSave: PropTypes.func,
   onCancel: PropTypes.func,
   error: PropTypes.string,
