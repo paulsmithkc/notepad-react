@@ -3,6 +3,7 @@ import ErrorBoundary from './ErrorBoundary';
 import NoteCard from './NoteCard';
 import NoteForm from './NoteForm';
 import isEmpty from 'lodash/isEmpty';
+import filter from 'lodash/filter';
 import map from 'lodash/map';
 import find from 'lodash/find';
 import assign from 'lodash/assign';
@@ -99,14 +100,15 @@ class App extends React.Component {
                 error={note.error}
                 onTitleChange={(id, title) => this.updateNote({ _id: id, newTitle: title })}
                 onBodyChange={(id, body) => this.updateNote({ _id: id, newBody: body })}
+                onCancel={(id) => this.updateNote({ _id: id, isEdit: false, error: null })}
                 onSave={(id) => this.saveNote(id)}
-                onCancel={(id) => this.updateNote({ _id: id, isEdit: false })}
               />
             ) : (
               <NoteCard
                 id={note._id}
                 title={note.title}
                 body={note.body}
+                error={note.error}
                 onEdit={(id, title, body) =>
                   this.updateNote({
                     _id: id,
@@ -116,6 +118,7 @@ class App extends React.Component {
                     error: null,
                   })
                 }
+                onDelete={(id) => this.deleteNote(id)}
               />
             )}
           </ErrorBoundary>
@@ -153,6 +156,23 @@ class App extends React.Component {
       .catch((err) => this.setState({ error: err.message }));
   }
   /**
+   * Delete a note from the database.
+   * @param {string} id the id of the note
+   */
+  deleteNote(id) {
+    fetch('/api/note/' + id, { method: 'DELETE' })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Failed to delete note: ${response.status} ${response.statusText}`);
+        }
+      })
+      .then(() => {
+        const notes = filter(this.state.notes, (note) => note._id != id);
+        this.setState({ notes: notes });
+      })
+      .catch((err) => this.updateNote({ _id: id, error: err.message }));
+  }
+  /**
    * Update the properties a single note.
    * @param {object} values the new property values
    */
@@ -166,7 +186,7 @@ class App extends React.Component {
     this.setState({ notes: notes });
   }
   /**
-   *
+   * Save a note to the database.
    * @param {string} id the id of the note
    */
   saveNote(id) {

@@ -29,6 +29,7 @@ const NoteCard = (props) => (
       </div>
       <div className="card-body">
         <p>{props.body || ''}</p>
+        <output>{props.error ? <h4 className="text-danger">{props.error}</h4> : null}</output>
       </div>
     </div>
   </div>
@@ -40,6 +41,7 @@ NoteCard.propTypes = {
   body: PropTypes.string,
   onEdit: PropTypes.func,
   onDelete: PropTypes.func,
+  error: PropTypes.string,
 };
 
 export default NoteCard;
