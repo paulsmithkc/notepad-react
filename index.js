@@ -3,6 +3,10 @@ const config = require('config');
 const express = require('express');
 const helmet = require('helmet');
 const path = require('path');
+const db = require('./db');
+
+// open a connection to the database
+db.connect();
 
 // inject joi-objectid
 const joi = require('@hapi/joi');
@@ -30,6 +34,6 @@ app.use(require('./middleware/error'));
 // bind the server to an http port
 const hostname = config.get('http.hostname');
 const port = config.get('http.port');
-app.listen(port, hostname, () => {
+app.listen(port, () => {
   debug(`Server running at http://${hostname}:${port}/`);
 });

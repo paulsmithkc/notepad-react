@@ -1,7 +1,7 @@
 {
-  "name": "@ranken/notepad_mongodb",
+  "name": "@ranken/notepad_mongodb_react",
   "version": "1.0.0",
-  "description": "Notepad example project w/ MongoDB",
+  "description": "Notepad example project w/ MongoDB & React",
   "main": "index.js",
   "scripts": {
     "start": "node -r dotenv/config index.js",
@@ -21,13 +21,7 @@
     }
   ],
   "engines": {
-    "node": "12.16.3"
-  },
-  "env": {
-    "DEBUG": {
-      "description": "Which debug channels should be monitored?",
-      "value": "app:*"
-    }
+    "node": "10.16.0"
   },
   "babel": {
     "presets": [
