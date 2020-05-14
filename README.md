@@ -1,4 +1,4 @@
-# Notepad example project w/ MongoDB
+# Notepad example project w/ MongoDB & React
 
 To test this website:
 1. Install MongoDB Community Server (https://www.mongodb.com/download-center/community)
@@ -7,4 +7,5 @@ To test this website:
 4. Open the terminal (Terminal > New Terminal)
 5. npm install
 6. npm run nodemon
-7. Open http://localhost:3000 in your browser
+7. npm run devserver
+8. Open http://localhost:3000 in your browser
