@@ -19,7 +19,8 @@
     "buildpacks",
     "crossorigin",
     "esversion",
-    "objectid"
+    "objectid",
+    "paren"
   ],
   //"cSpell.enableFiletypes": [],
   "eslint.enable": true,

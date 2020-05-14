@@ -42,6 +42,7 @@ async function connect() {
       poolSize: 10,
     });
     databaseConnection = client.db(DB_NAME);
+    debug('connected.');
   }
   return databaseConnection;
 }
