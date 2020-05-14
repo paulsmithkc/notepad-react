@@ -1,6 +1,6 @@
 const path = require('path');
 const config = require('config');
-const webpack = require('webpack');
+// const webpack = require('webpack');
 
 const apiHostname = config.get('http.hostname');
 const apiPort = config.get('http.port');
