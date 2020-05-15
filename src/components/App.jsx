@@ -44,7 +44,7 @@ class App extends React.Component {
           <div>
             <button
               type="button"
-              className="btn btn-outline-primary mx-1"
+              className="btn btn-outline-primary m-1"
               title="Refresh"
               onClick={(e) => this.getAllNotes()}
             >
@@ -52,7 +52,7 @@ class App extends React.Component {
             </button>
             <button
               type="button"
-              className="btn btn-outline-primary mx-1"
+              className="btn btn-outline-primary m-1"
               title="Add Note"
               onClick={(e) => this.addNote()}
             >
@@ -60,7 +60,7 @@ class App extends React.Component {
             </button>
             <button
               type="button"
-              className="btn btn-outline-primary mx-1"
+              className="btn btn-outline-primary m-1"
               title="Delete All Notes"
               onClick={(e) => this.confirmDeleteAllNotes()}
             >
