@@ -1,5 +1,8 @@
 import React from 'react';
 import ErrorBoundary from './ErrorBoundary';
+import 'bootstrap';
+import bootbox from 'bootbox';
+
 import isEmpty from 'lodash/isEmpty';
 import filter from 'lodash/filter';
 import map from 'lodash/map';
@@ -59,7 +62,7 @@ class App extends React.Component {
               type="button"
               className="btn btn-outline-primary mx-1"
               title="Delete All Notes"
-              onClick={(e) => this.deleteAllNotes()}
+              onClick={(e) => this.confirmDeleteAllNotes()}
             >
               <i className="fa-fw fas fa-trash"></i> Delete All Notes
             </button>
@@ -117,7 +120,7 @@ class App extends React.Component {
                 onEdit={(id, title, body) =>
                   this.updateNote(id, { isEdit: true, newTitle: title, newBody: body, error: null })
                 }
-                onDelete={(id) => this.deleteNote(id)}
+                onDelete={(id) => this.confirmDeleteNote(id)}
               />
             )}
           </ErrorBoundary>
@@ -140,6 +143,49 @@ class App extends React.Component {
       })
       .then((data) => this.setState({ notes: data, error: null }))
       .catch((err) => this.setState({ notes: [], error: err.message }));
+  }
+  /**
+   * Displays a confirmation box, before delete all notes from the database.
+   */
+  confirmDeleteAllNotes() {
+    bootbox.confirm({
+      title: 'Warning',
+      message: '<h5>Are you sure that you want to delete <u>ALL</u> notes?</h5><h6>(This is permanent.)</h6>',
+      buttons: {
+        confirm: { label: 'Yes, delete everything', className: 'btn-danger' },
+        cancel: { label: 'Cancel', className: 'btn-outline-dark' },
+      },
+      closeButton: true,
+      onEscape: true,
+      backdrop: true,
+      callback: (result) => {
+        if (result) {
+          this.deleteAllNotes();
+        }
+      },
+    });
+  }
+  /**
+   * Displays a confirmation box, before delete all notes from the database.
+   * @param {string} id the id of the note
+   */
+  confirmDeleteNote(id) {
+    bootbox.confirm({
+      title: 'Warning',
+      message: '<h5>Are you sure that you want to this note?</h5><h6>(This is permanent.)</h6>',
+      buttons: {
+        confirm: { label: 'Yes, delete it', className: 'btn-danger' },
+        cancel: { label: 'Cancel', className: 'btn-outline-dark' },
+      },
+      closeButton: true,
+      onEscape: true,
+      backdrop: true,
+      callback: (result) => {
+        if (result) {
+          this.deleteNote(id);
+        }
+      },
+    });
   }
   /**
    * Delete all notes from the database.
