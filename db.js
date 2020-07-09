@@ -57,7 +57,7 @@ async function getAllNotes() {
 }
 
 /**
- * Returns a single not with the given ID.
+ * Returns a single note with the given ID.
  * @param {string} id the id of the note
  * @return {Promise<Note>}
  */
